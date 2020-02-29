@@ -338,3 +338,7 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+MigrationBackup/f90a236d/TheHarvest/NuGetUpgradeLog.html
+MigrationBackup/f90a236d/TheHarvest/packages.config
+MigrationBackup/f90a236d/TheHarvest/TheHarvest.csproj
+MigrationBackup/f90a236d/TheHarvest/packages.config
