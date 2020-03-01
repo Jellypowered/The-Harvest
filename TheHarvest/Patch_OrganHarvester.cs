@@ -36,7 +36,7 @@ namespace TheHarvest.HarmonyPatches
                     {
                         if (hediff.def.spawnThingOnRemoved != null)
                         {
-                            Log.Message("[The Harvest] Obtained: " + hediff.def.spawnThingOnRemoved.defName);
+                            //Log.Message("[The Harvest] Obtained: " + hediff.def.spawnThingOnRemoved.defName, false);
                             yield return ThingMaker.MakeThing(hediff.def.spawnThingOnRemoved, null);
                         }
                     }
@@ -48,7 +48,7 @@ namespace TheHarvest.HarmonyPatches
                         (Initialization.deep_harvest.Value && !p.RaceProps.Animal)))
                     {
                         p.health.AddHediff(HediffMaker.MakeHediff(HediffDefOf.MissingBodyPart, p, record), null, null);
-                        Log.Message("[The Harvest] Obtained: " + record.def.spawnThingOnRemoved.defName);
+                        //Log.Message("[The Harvest] Obtained: " + record.def.spawnThingOnRemoved.defName, false);
                         yield return ThingMaker.MakeThing(record.def.spawnThingOnRemoved, null);
                     }
                 }
