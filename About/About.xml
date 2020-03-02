@@ -4,9 +4,11 @@
 	<author>Jellypowered</author>
 	<description>
 Features:
-1. Butchering a Mechanoid Scyther corpse will also yield two Scyther Blades, just like how could you get elephant tusks.
+1. Butchering a Mechanoid Scyther corpse MAY yield two Scyther Blades, just like how could you get elephant tusks. However, This appears to not be working since B19. 
+If you have a mod that allows Scythers to have blades again, in thoery this should work. Put this mod AFTER that mod. 
 2. Butchering a corpse with any implants or added parts will also yield that parts, like bionic eyes.
 3. (Optional, default off) Butchering a corpse with any harvestable natural organs will also yield that organs, like heart and liver.
+You can configure this in the mod settings. 
 
 Incompatibility: None
 Old Save Compatible: Yes
