@@ -1,58 +1,67 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using HarmonyLib;
 using RimWorld;
 using Verse;
-using HarmonyLib;
-
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TheHarvest.HarmonyPatches
 {
-    [HarmonyPatch(typeof(Pawn), "ButcherProducts")]
+    [HarmonyPatch(typeof(Corpse), nameof(Corpse.ButcherProducts))]
     public static class Patch_OrganHarvester
     {
-        public static void Postfix(ref IEnumerable<Thing> __result, ref Pawn __instance, Pawn butcher, float efficiency)
+        public static void Postfix(ref IEnumerable<Thing> __result, Corpse __instance)
         {
-            __result = __result.CompackedItems(__instance);
+            var innerPawn = __instance?.InnerPawn;
+            if (innerPawn?.health?.hediffSet == null) return;
+
+            var extraItems = innerPawn.DetachValuableItems().ToList();
+            if (extraItems.Count == 0) return;
+
+            __result = __result.Concat(extraItems);
         }
 
-        private static IEnumerable<Thing> CompackedItems(this IEnumerable<Thing> list, Pawn pawn)
+    private static readonly string[] RJWBodyPartKeywords = new[]
+    {
+    "Genital", "Penis", "Vagina", "Anus", "Breast", "Uterus", "Ovary", "Testicle"
+    };
+        private static IEnumerable<Thing> DetachValuableItems(this Pawn pawn)
         {
-            foreach (Thing thing in list)
-                yield return thing;
-            foreach (Thing thing in pawn.DetachValuableItems())
-                yield return thing;
-        }
+            var hediffSet = pawn.health.hediffSet;
 
-        private static IEnumerable<Thing> DetachValuableItems(this Pawn p)
-        {
-            foreach (BodyPartRecord record in p.health.hediffSet.GetNotMissingParts(BodyPartHeight.Undefined, BodyPartDepth.Undefined))
+            foreach (var part in hediffSet.GetNotMissingParts())
             {
-                IEnumerable<Hediff> hediffs = from x in p.health.hediffSet.hediffs
-                                              where x.Part == record
-                                              select x;
-                if (hediffs.Any())
+                // ❌ Skip RJW body parts
+                if (IsRJWBodyPart(part.def)) continue;
+
+                // Case 1: part has hediffs that can spawn items
+                var hediffs = hediffSet.hediffs.Where(h => h.Part == part);
+                foreach (var hediff in hediffs)
                 {
-                    foreach (Hediff hediff in hediffs)
+                    var spawnDef = hediff.def.spawnThingOnRemoved;
+                    if (spawnDef != null)
                     {
-                        if (hediff.def.spawnThingOnRemoved != null)
-                        {
-                            //Log.Message("[The Harvest] Obtained: " + hediff.def.spawnThingOnRemoved.defName, false);
-                            yield return ThingMaker.MakeThing(hediff.def.spawnThingOnRemoved, null);
-                        }
+                        yield return ThingMaker.MakeThing(spawnDef);
                     }
                 }
-                else
+
+                // Case 2: no hediffs, raw body part removal
+                if (!hediffs.Any() &&
+                    part.def.spawnThingOnRemoved != null &&
+                    (!part.def.alive || (TheHarvestMod.Settings.deep_harvest && !pawn.RaceProps.Animal)))
                 {
-                    if (record.def.spawnThingOnRemoved != null &&
-                        (record.def.alive == false ||
-                        (Initialization.deep_harvest.Value && !p.RaceProps.Animal)))
-                    {
-                        p.health.AddHediff(HediffMaker.MakeHediff(HediffDefOf.MissingBodyPart, p, record), null, null);
-                        //Log.Message("[The Harvest] Obtained: " + record.def.spawnThingOnRemoved.defName, false);
-                        yield return ThingMaker.MakeThing(record.def.spawnThingOnRemoved, null);
-                    }
+                    pawn.health.AddHediff(HediffMaker.MakeHediff(HediffDefOf.MissingBodyPart, pawn, part));
+                    yield return ThingMaker.MakeThing(part.def.spawnThingOnRemoved);
                 }
             }
         }
+        private static bool IsRJWBodyPart(BodyPartDef def)
+        {
+            if (def == null || string.IsNullOrEmpty(def.defName))
+                return false;
+
+            return RJWBodyPartKeywords.Any(keyword =>
+                def.defName.IndexOf(keyword, System.StringComparison.OrdinalIgnoreCase) >= 0);
+        }
     }
 }
+
