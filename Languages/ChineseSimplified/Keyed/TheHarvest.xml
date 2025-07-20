@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-	<TheHarvest.deep_harvest.name>深度割取</TheHarvest.deep_harvest.name>
-	<TheHarvest.deep_harvest.desc>屠宰拥有任何可割取的天然器官的尸体也会获得那些器官，例如心脏和肝脏。</TheHarvest.deep_harvest.desc>
+  <TheHarvest>丰收</TheHarvest>
+  <TheHarvest.deep_harvest.name>深度割取</TheHarvest.deep_harvest.name>
+  <TheHarvest.deep_harvest.desc>屠宰拥有任何可割取的天然器官的尸体也会获得那些器官，例如心脏和肝脏。</TheHarvest.deep_harvest.desc>
 </LanguageData>

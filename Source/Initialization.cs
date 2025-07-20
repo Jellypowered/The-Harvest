@@ -14,11 +14,13 @@ namespace TheHarvest
             new Harmony("com.jelly.theharvest").PatchAll();
         }
     }
+
     public class TheHarvestMod : Mod
     {
         public static TheHarvestSettings Settings;
 
-        public TheHarvestMod(ModContentPack content) : base(content)
+        public TheHarvestMod(ModContentPack content)
+            : base(content)
         {
             Settings = GetSettings<TheHarvestSettings>();
         }
@@ -43,7 +45,11 @@ namespace TheHarvest
         {
             Listing_Standard listing = new Listing_Standard();
             listing.Begin(rect);
-            listing.CheckboxLabeled("TheHarvest.deep_harvest.name".Translate(), ref deep_harvest, "TheHarvest.deep_harvest.desc".Translate());
+            listing.CheckboxLabeled(
+                "TheHarvest.deep_harvest.name".Translate(),
+                ref deep_harvest,
+                "TheHarvest.deep_harvest.desc".Translate()
+            );
             listing.End();
         }
 

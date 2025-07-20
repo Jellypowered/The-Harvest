@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-	<TheHarvest.deep_harvest.name>Deep Harvest</TheHarvest.deep_harvest.name>
-	<TheHarvest.deep_harvest.desc>Butchering a corpse with any harvestable natural organs will also yield that organs, like heart and liver.</TheHarvest.deep_harvest.desc>
+  <TheHarvest>The Harvest</TheHarvest>
+  <TheHarvest.deep_harvest.name>Deep Harvest</TheHarvest.deep_harvest.name>
+  <TheHarvest.deep_harvest.desc>Butchering a corpse with any harvestable natural organs will also yield those organs, like the heart and liver.</TheHarvest.deep_harvest.desc>
 </LanguageData>
